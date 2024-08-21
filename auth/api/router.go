@@ -3,6 +3,7 @@ package api
 import (
 	_ "auth-service/api/docs"
 	"auth-service/api/handler"
+	"auth-service/api/middleware"
 	"auth-service/config"
 	"auth-service/storage"
 
@@ -14,12 +15,12 @@ import (
 // @title Authorazation
 // @version 1.0
 // @description Authorazation API of On-Demand Car Wash Service
-// @host localhost:8081
 // @BasePath /auth
 func NewRouter(s storage.IStorage, cfg *config.Config) *gin.Engine {
 	h := handler.NewHandler(s, cfg)
 
 	r := gin.Default()
+	r.Use(middleware.CORSMiddleware())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	auth := r.Group("/auth")
